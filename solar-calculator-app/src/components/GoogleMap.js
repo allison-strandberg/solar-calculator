@@ -28,18 +28,32 @@ const GoogleMap = (props) => {
     return polyline
   }
 
-  // Render the map when the component updates.
+  // Render the map when the component mounts.
   useEffect(() => {
     googleMap.current = createGoogleMap();
     polyline.current = createPolyline(googleMap);
     googleMap.current.addListener('click', props.onClick);
-  });
+  }, []);
+
+  // Update the map center when the center latitude or longitude changes.
+  useEffect(() => {
+    googleMap.current.setCenter(
+      new window.google.maps.LatLng(
+        props.centerLatitude, props.centerLongitude
+      )
+    );
+  }, [props.centerLatitude, props.centerLongitude]);
+
+  // Update the path when the list of coordinates changes.
+  useEffect(() => {
+    polyline.current.setPath(props.solarCoordinates);
+  }, [props.solarCoordinates]);
 
   return (
-      <div
-        className="google-map"
-        ref={googleMapRef}
-      />
+    <div
+      className="google-map"
+      ref={googleMapRef}
+    />
   )
 }
 
