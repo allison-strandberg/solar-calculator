@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const GoogleMap = (props) => {
   const googleMapRef = React.createRef();
+  const googleMap = useRef(null);
+  const polyline = useRef(null);
 
   const createGoogleMap = () => {
     const googleMap = new window.google.maps.Map(googleMapRef.current, {
@@ -22,15 +24,15 @@ const GoogleMap = (props) => {
       strokeOpacity: 1.0,
       strokeWeight: 3
     });
-    polyline.setMap(googleMap);
+    polyline.setMap(googleMap.current);
     return polyline
   }
 
   // Render the map when the component updates.
   useEffect(() => {
-    googleMapRef.current = createGoogleMap();
-    createPolyline(googleMapRef.current);
-    googleMapRef.current.addListener('click', props.onClick);
+    googleMap.current = createGoogleMap();
+    polyline.current = createPolyline(googleMap);
+    googleMap.current.addListener('click', props.onClick);
   });
 
   return (

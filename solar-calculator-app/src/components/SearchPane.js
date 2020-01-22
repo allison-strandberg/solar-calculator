@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const SearchPane = (props) => {
 	const searchFieldRef = React.createRef();
+	const searchField = useRef(null);
 
   const createAutocompleteField = () =>
     new window.google.maps.places.Autocomplete(searchFieldRef.current, {
@@ -12,7 +13,7 @@ const SearchPane = (props) => {
   // Update the latitude and longitude values in the application state
   // based on the selected address.
   const handlePlaceChange = () => {
-    const place = searchFieldRef.current.getPlace();
+    const place = searchField.current.getPlace();
     const latitude = place.geometry.location.lat();
     const longitude = place.geometry.location.lng();
     props.onPlaceChange(latitude, longitude);
@@ -20,11 +21,11 @@ const SearchPane = (props) => {
 
   // Render the search field when the component updates.
   useEffect(() => {
-    searchFieldRef.current = createAutocompleteField();
+    searchField.current = createAutocompleteField();
     // Only return geometry info, which contains latitude and longitude.
-    searchFieldRef.current.setFields(['geometry']);
+    searchField.current.setFields(['geometry']);
     // Handle selection of an autocomplete suggestion.
-    searchFieldRef.current.addListener(
+    searchField.current.addListener(
     	'place_changed', handlePlaceChange);
   });
 
