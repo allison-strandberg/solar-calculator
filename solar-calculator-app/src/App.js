@@ -8,12 +8,21 @@ const App = () => {
   const [scriptReady, setScriptReady] = useState(false);
   const [centerLatitude, setCenterLatitude] = useState(42.360092);
   const [centerLongitude, setCenterLongitude] = useState(-71.088171);
+  const [solarCoordinates, setSolarCoordinates] = useState([]);
 
   // Recenter the map on a given latitude and longitude.
   const recenterMap = (latitude, longitude) => {
     setCenterLatitude(latitude);
     setCenterLongitude(longitude);
-  } 
+  }
+
+  const handleMapClick = event => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    setSolarCoordinates(solarCoordinates => 
+      [...solarCoordinates, {lat, lng}]
+    );
+  }
 
   // Load the Google Maps script when the component mounts.
   useEffect(() => {
@@ -35,12 +44,14 @@ const App = () => {
     <div className="app">
       {scriptReady 
         ? <SearchPane 
-            onPlaceChange={recenterMap}/> 
+            onPlaceChange={recenterMap}/>
         : ''}
       {scriptReady 
         ? <GoogleMap 
             centerLatitude={centerLatitude}
             centerLongitude={centerLongitude}
+            onClick={handleMapClick}
+            solarCoordinates={solarCoordinates}
           /> 
         : ''
       }
