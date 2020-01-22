@@ -6,6 +6,14 @@ import { GOOGLE_MAPS_API_KEY } from './apiKey';
 
 const App = () => {
   const [scriptReady, setScriptReady] = useState(false);
+  const [centerLatitude, setCenterLatitude] = useState(42.360092);
+  const [centerLongitude, setCenterLongitude] = useState(-71.088171);
+
+  // Recenter the map on a given latitude and longitude.
+  const recenterMap = (latitude, longitude) => {
+    setCenterLatitude(latitude);
+    setCenterLongitude(longitude);
+  } 
 
   // Load the Google Maps script when the component mounts.
   useEffect(() => {
@@ -25,8 +33,17 @@ const App = () => {
 
   return (
     <div className="app">
-      {scriptReady ? <SearchPane /> : ''}
-      {scriptReady ? <GoogleMap /> : ''}
+      {scriptReady 
+        ? <SearchPane 
+            onPlaceChange={recenterMap}/> 
+        : ''}
+      {scriptReady 
+        ? <GoogleMap 
+            centerLatitude={centerLatitude}
+            centerLongitude={centerLongitude}
+          /> 
+        : ''
+      }
     </div>
   );
 }

@@ -1,28 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-
-// East Campus, MIT
-const location = {
-  lat: 42.360092,
-  lng: -71.088171,
-};
+import React, { useEffect } from 'react';
 
 const GoogleMap = (props) => {
   const googleMapRef = React.createRef();
-  const googleMap = useRef(null);
 
   const createGoogleMap = () =>
     new window.google.maps.Map(googleMapRef.current, {
       disableDefaultUI: true,
       zoom: 17,
       center: {
-        lat: location.lat,
-        lng: location.lng,
+        lat: props.centerLatitude,
+        lng: props.centerLongitude,
       }
     });
 
   // Render the map when the component updates.
   useEffect(() => {
-    googleMap.current = createGoogleMap();
+    googleMapRef.current = createGoogleMap();
   });
 
   return (
