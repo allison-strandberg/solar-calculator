@@ -3,11 +3,16 @@ import './App.css';
 import GoogleMap from './components/GoogleMap';
 import SearchPane from './components/SearchPane';
 import { GOOGLE_MAPS_API_KEY } from './apiKey';
+import * as constants from './constants';
 
 const App = () => {
   const [scriptReady, setScriptReady] = useState(false);
-  const [centerLatitude, setCenterLatitude] = useState(42.360092);
-  const [centerLongitude, setCenterLongitude] = useState(-71.088171);
+  const [centerLatitude, setCenterLatitude] = useState(
+    constants.INITIAL_LATITUDE
+  );
+  const [centerLongitude, setCenterLongitude] = useState(
+    constants.INITIAL_LONGITUDE
+  );
   const [solarCoordinates, setSolarCoordinates] = useState([]);
   const [solarLatLng, setSolarLatLng] = useState([]);
   const [area, setArea] = useState(0);
@@ -56,7 +61,7 @@ const App = () => {
       const squareMeters = window.google.maps.geometry.spherical.computeArea(
         solarLatLng
       );
-      const squareFeet = 10.764 * squareMeters;
+      const squareFeet = constants.SQUARE_FEET_PER_SQUARE_METER * squareMeters;
 
       setArea(Math.round(squareFeet));
     }
