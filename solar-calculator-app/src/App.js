@@ -29,6 +29,11 @@ const App = () => {
     );
   }
 
+  const handleResetMapClick = () => {
+    setSolarCoordinates([]);
+    setSolarLatLng([]);
+  }
+
   // Load the Google Maps script when the component mounts.
   useEffect(() => {
     if (!document.getElementById('script-google-maps')) {
@@ -52,6 +57,7 @@ const App = () => {
         solarLatLng
       );
       const squareFeet = 10.764 * squareMeters;
+
       setArea(Math.round(squareFeet));
     }
   }, [solarLatLng])
@@ -61,6 +67,7 @@ const App = () => {
       {scriptReady 
         ? <SearchPane 
             onPlaceChange={recenterMap}
+            onResetMapClick={handleResetMapClick}
             area={area}
           />
         : ''}

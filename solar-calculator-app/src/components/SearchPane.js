@@ -19,7 +19,10 @@ const SearchPane = (props) => {
     props.onPlaceChange(latitude, longitude);
   }
 
-  // Render the search field when the component updates.
+  const calculateNominalPower = (areaInSquareFeet) => 
+    Math.round((areaInSquareFeet * 12) / 1000);
+
+  // Render the search field when the component mounts.
   useEffect(() => {
     searchField.current = createAutocompleteField();
     // Only return geometry info, which contains latitude and longitude.
@@ -27,7 +30,7 @@ const SearchPane = (props) => {
     // Handle selection of an autocomplete suggestion.
     searchField.current.addListener(
       'place_changed', handlePlaceChange);
-  });
+  }, []);
 
   return (
       <div className="search-pane">
@@ -39,7 +42,12 @@ const SearchPane = (props) => {
         <p>Click two points on the map to draw a line between them.</p>
         <p>Draw a shape to see the nominal power 
         of a solar installation in that area.</p>
-        <p>Area is {props.area} square feet</p>
+        <p>Area is {props.area} square feet.</p>
+        <p>Peak power is {calculateNominalPower(props.area)} kilowatts.</p>
+        <button 
+          className="button-clear"
+          onClick={props.onResetMapClick}
+        >Reset Map</button>
       </div>
   )
 }
