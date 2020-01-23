@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import * as constants from '../constants';
 
 const SearchPane = (props) => {
   const searchFieldRef = React.createRef();
@@ -20,7 +21,10 @@ const SearchPane = (props) => {
   }
 
   const calculateNominalPower = (areaInSquareFeet) => 
-    Math.round((areaInSquareFeet * 12) / 1000);
+    Math.round(
+      (areaInSquareFeet 
+       * constants.WATTS_PER_SQUARE_FOOT) / constants.WATTS_PER_KILOWATT
+    );
 
   // Render the search field when the component mounts.
   useEffect(() => {
@@ -42,12 +46,16 @@ const SearchPane = (props) => {
         <p>Click two points on the map to draw a line between them.</p>
         <p>Draw a shape to see the nominal power 
         of a solar installation in that area.</p>
-        <p>Area is {props.area} square feet.</p>
-        <p>Peak power is {calculateNominalPower(props.area)} kilowatts.</p>
+        <p>Area is 
+          <b> {props.area} square feet.</b>
+        </p>
+        <p>Peak power is 
+          <b> {calculateNominalPower(props.area)} kilowatts.</b>
+        </p>
         <button 
           className="button-clear"
           onClick={props.onResetMapClick}
-        >Reset Map</button>
+        ><b>Reset Map</b></button>
       </div>
   )
 }
