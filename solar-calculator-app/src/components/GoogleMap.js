@@ -4,6 +4,7 @@ const GoogleMap = (props) => {
   const googleMapRef = React.createRef();
   const googleMap = useRef(null);
   const polyline = useRef(null);
+  const polygon = useRef(null);
 
   const createGoogleMap = () => {
     const googleMap = new window.google.maps.Map(googleMapRef.current, {
@@ -28,11 +29,30 @@ const GoogleMap = (props) => {
     return polyline
   }
 
-  // Render the map when the component mounts.
-  useEffect(() => {
+  const createPolygon = (googleMap) => {
+    const polygon = new window.google.maps.Polygon({
+      paths: [],
+      strokeColor: '#F39C12',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#F39C12',
+      fillOpacity: 0.35
+    });
+    polygon.setMap(googleMap.current);
+    return polygon
+  }
+
+  const initMapObjects = () => {
     googleMap.current = createGoogleMap();
     polyline.current = createPolyline(googleMap);
+    polygon.current = createPolygon(googleMap);
+  }
+
+  // Render the map when the component mounts.
+  useEffect(() => {
+    initMapObjects();
     googleMap.current.addListener('click', props.onClick);
+    //polyline.current.addListener('click', handlePolylineClick);
   }, []);
 
   // Update the map center when the center latitude or longitude changes.
@@ -47,6 +67,7 @@ const GoogleMap = (props) => {
   // Update the path when the list of coordinates changes.
   useEffect(() => {
     polyline.current.setPath(props.solarCoordinates);
+    polygon.current.setPath(props.solarCoordinates);
   }, [props.solarCoordinates]);
 
   return (
