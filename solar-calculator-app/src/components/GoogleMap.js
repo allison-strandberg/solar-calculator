@@ -21,7 +21,7 @@ const GoogleMap = (props) => {
   const createPolyline = (googleMap) => {
     const polyline = new window.google.maps.Polyline({
       path: props.solarCoordinates,
-      strokeColor: '#000000',
+      strokeColor: '#F39C12',
       strokeOpacity: 1.0,
       strokeWeight: 3
     });
@@ -52,7 +52,6 @@ const GoogleMap = (props) => {
   useEffect(() => {
     initMapObjects();
     googleMap.current.addListener('click', props.onClick);
-    //polyline.current.addListener('click', handlePolylineClick);
   }, []);
 
   // Update the map center when the center latitude or longitude changes.

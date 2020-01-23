@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
 const SearchPane = (props) => {
-	const searchFieldRef = React.createRef();
-	const searchField = useRef(null);
+  const searchFieldRef = React.createRef();
+  const searchField = useRef(null);
 
   const createAutocompleteField = () =>
     new window.google.maps.places.Autocomplete(searchFieldRef.current, {
@@ -26,7 +26,7 @@ const SearchPane = (props) => {
     searchField.current.setFields(['geometry']);
     // Handle selection of an autocomplete suggestion.
     searchField.current.addListener(
-    	'place_changed', handlePlaceChange);
+      'place_changed', handlePlaceChange);
   });
 
   return (
@@ -36,6 +36,10 @@ const SearchPane = (props) => {
           type="text"
           ref={searchFieldRef}
         />
+        <p>Click two points on the map to draw a line between them.</p>
+        <p>Draw a shape to see the nominal power 
+        of a solar installation in that area.</p>
+        <p>Area is {props.area} square feet</p>
       </div>
   )
 }

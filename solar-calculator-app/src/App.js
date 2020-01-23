@@ -9,6 +9,8 @@ const App = () => {
   const [centerLatitude, setCenterLatitude] = useState(42.360092);
   const [centerLongitude, setCenterLongitude] = useState(-71.088171);
   const [solarCoordinates, setSolarCoordinates] = useState([]);
+  const [solarLatLng, setSolarLatLng] = useState([]);
+  const [area, setArea] = useState(0);
 
   // Recenter the map on a given latitude and longitude.
   const recenterMap = (latitude, longitude) => {
@@ -22,6 +24,9 @@ const App = () => {
     setSolarCoordinates(solarCoordinates => 
       [...solarCoordinates, {lat, lng}]
     );
+    setSolarLatLng(solarLatLng => 
+      [...solarLatLng, event.latLng]
+    );
   }
 
   // Load the Google Maps script when the component mounts.
@@ -31,7 +36,7 @@ const App = () => {
       googleMapsScript.id = 'script-google-maps';
       googleMapsScript.src = "https://maps.googleapis.com/maps/api/js?" +
         "key=" + GOOGLE_MAPS_API_KEY +
-        "&libraries=places";
+        "&libraries=places,geometry";
       window.document.body.appendChild(googleMapsScript);
 
       googleMapsScript.addEventListener('load', () => {
@@ -40,11 +45,24 @@ const App = () => {
     }
   }, []);
 
+  // When the solar installation coordinates are updated, recalculate the area.
+  useEffect(() => {
+    if (scriptReady) {
+      const squareMeters = window.google.maps.geometry.spherical.computeArea(
+        solarLatLng
+      );
+      const squareFeet = 10.764 * squareMeters;
+      setArea(Math.round(squareFeet));
+    }
+  }, [solarLatLng])
+
   return (
     <div className="app">
       {scriptReady 
         ? <SearchPane 
-            onPlaceChange={recenterMap}/>
+            onPlaceChange={recenterMap}
+            area={area}
+          />
         : ''}
       {scriptReady 
         ? <GoogleMap 
